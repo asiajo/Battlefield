@@ -31,7 +31,15 @@ Gui::Gui( Battleship computer, Battleship player)
                 if(x<12 && userSet == true)
                 {
                     if (e.key.code == sf::Mouse::Left) 
-                            computer.shoot(x,y);
+                            {
+                                if(computer.getFieldInfo(x,y)<=1)
+                                {
+                                    std::pair <int, int> shipPos = computer.computerShot(player);
+                                    computer.shoot(x,y);
+                                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                                    player.shoot(shipPos.first, shipPos.second);
+                                }
+                            }
                 }
                 else if(x>12 && userSet == false)
                     if (e.key.code == sf::Mouse::Left) 
@@ -45,9 +53,13 @@ Gui::Gui( Battleship computer, Battleship player)
         app.clear(sf::Color::White);
         setGraphic(s, app, computer, 0);
         setGraphic(s, app, player, 12);
-        if (computer.checkIfWon()) std::cout <<" won" << std::endl;
-        if (player.checkIfWon() && userSet == true) userWon = true;
         app.display();
+        if (computer.checkIfWon()) alert("You won!");
+        if (player.checkIfWon() && userSet == true) 
+        {
+            userWon = true;
+            alert("You lost!");
+        }
     }
 
 }
@@ -64,6 +76,26 @@ void Gui::setGraphic(sf::Sprite& s, sf::RenderWindow& app, Battleship& player, i
         }
 }
 
+void Gui::alert(std::string text)
+{
+    sf::RenderWindow alrt(sf::VideoMode(200, 200), text);
+    sf::Texture t;
+    t.loadFromFile("images/tiles.jpg");
+    sf::Sprite s(t);
+    while (alrt.isOpen()){
+        alrt.clear(sf::Color::White);
+        alrt.draw(s);
+
+        sf::Event e;
+        while (alrt.pollEvent(e))
+        {
+            if (e.type == sf::Event::Closed)
+                alrt.close();
+        }
+
+        alrt.display();
+    }
+}
 
 
 

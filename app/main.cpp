@@ -7,7 +7,8 @@ int main(int argc, char* argv[])
 {
     Battleship computer;
     Battleship player;
-    
+    srand(time(NULL));
+
     computer.fillComputerField();
     Gui gui(computer, player);
     return 0;

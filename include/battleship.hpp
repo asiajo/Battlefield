@@ -12,12 +12,11 @@
 class Battleship
 {
     int _fieldSize;
-    std::vector<std::vector<int>> battleField;
+    std::vector<std::vector<int>> battleField; 
+    std::vector<std::vector<int>> hideBattleField; 
     std::pair <int, int> generatePosition(int dirX, int len);
     bool generateShip(int len);
     bool checkSurrounding(int x, int y);
-    void fillSurrounding(int x, int y);
-    void refillZeros();
 public:
     Battleship ();
     ~Battleship ();
@@ -27,5 +26,7 @@ public:
     bool checkIfWon();
     void fillComputerField();
     void showField();
+    int getFieldSize();
+    std::pair <int, int> computerShot(Battleship& player);
 };
     

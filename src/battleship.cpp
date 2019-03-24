@@ -4,8 +4,12 @@ Battleship::Battleship()
 {
     _fieldSize = 12;
     battleField.resize(_fieldSize);
+    battleField.resize(_fieldSize);
     for(int i =0; i<_fieldSize; i++)
+    {
         battleField[i].resize(_fieldSize, 0); 
+        battleField[i].resize(_fieldSize, 0); 
+    }
 }
 
 Battleship::~Battleship(){}
@@ -105,7 +109,7 @@ bool Battleship::generateShip(int len)
 
 void Battleship::fillComputerField()
 {
-    srand(time(NULL));
+    
     int amount = 4;
     while(amount>0){
         for(int i = 0; i < 5-amount; i++)
@@ -124,4 +128,18 @@ void Battleship::showField()
             std::cout << e;
         }
     std::cout << std::endl;});
+}
+
+std::pair <int, int> Battleship::computerShot(Battleship& player)
+{
+    bool flag = false;
+    int x,y;
+    while (!flag)
+    {
+        x = (rand() %10)+1;
+        y = (rand() %10)+1;
+        if(player.getFieldInfo(x,y) <=1)
+            flag = true;
+    }
+    return std::make_pair(x, y);
 }
