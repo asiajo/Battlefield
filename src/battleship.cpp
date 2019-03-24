@@ -1,6 +1,4 @@
 #include "../include/battleship.hpp"
-#include <typeinfo>
-
 
 Battleship::Battleship()
 {
@@ -21,7 +19,7 @@ int Battleship::getFieldInfo(int x, int y)
     
 bool Battleship::pushShip(int x, int y)
 {
-    if( ( x < _fieldSize && x > 0 ) && ( y < _fieldSize && y > 0 ) )
+    if( ( x < _fieldSize-1 && x > 0 ) && ( y < _fieldSize-1 && y > 0 ) )
     {
         if(battleField[x][y] == 0)
         {
@@ -41,7 +39,7 @@ bool Battleship::shoot(int x, int y)
             battleField[x][y] = 2;
             return true;
         }
-        else
+        else if (getFieldInfo(x, y) == 0)
         {
             battleField[x][y] = 3;
             return false;
@@ -54,7 +52,8 @@ bool Battleship::checkIfWon()
 {
     for(auto vect : battleField)
         if(std::find(begin(vect), end(vect), 1) != end(vect)) return false;
-    return true;
+    
+    return true; 
 }
 
 std::pair <int, int> Battleship::generatePosition(int dirX, int len)
@@ -126,4 +125,3 @@ void Battleship::showField()
         }
     std::cout << std::endl;});
 }
-

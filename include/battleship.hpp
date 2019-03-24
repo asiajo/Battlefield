@@ -8,7 +8,7 @@
 #include <cstdlib>      //abs
 #include <ctime>
 
- /// Game logic  
+  
 class Battleship
 {
     int _fieldSize;
@@ -28,5 +28,4 @@ public:
     void fillComputerField();
     void showField();
 };
-
-
+    
