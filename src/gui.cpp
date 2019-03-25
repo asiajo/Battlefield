@@ -1,7 +1,7 @@
 #include "../include/gui.hpp"
 
 
-Gui::Gui( Battleship computer, Battleship player)
+Gui::Gui (BattleshipComputer& computer, Battleship& player)
 {
     
     sf::RenderWindow app(sf::VideoMode(w*12*2, w*12), "Battleship");
@@ -61,7 +61,6 @@ Gui::Gui( Battleship computer, Battleship player)
             alert("You lost!");
         }
     }
-
 }
 
 void Gui::setGraphic(sf::Sprite& s, sf::RenderWindow& app, Battleship& player, int move)

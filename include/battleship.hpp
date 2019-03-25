@@ -11,12 +11,9 @@
   
 class Battleship
 {
+protected:
     int _fieldSize;
     std::vector<std::vector<int>> battleField; 
-    std::vector<std::vector<int>> hideBattleField; 
-    std::pair <int, int> generatePosition(int dirX, int len);
-    bool generateShip(int len);
-    bool checkSurrounding(int x, int y);
 public:
     Battleship ();
     ~Battleship ();
@@ -24,9 +21,7 @@ public:
     bool pushShip(int x, int y);
     bool shoot(int x, int y);
     bool checkIfWon();
-    void fillComputerField();
     void showField();
     int getFieldSize();
-    std::pair <int, int> computerShot(Battleship& player);
 };
     
