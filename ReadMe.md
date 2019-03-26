@@ -16,7 +16,7 @@ Tests made using google test. Need to add appropriate google test data.
 
 ## Planned Updates
 
-- [ ] hide computer's field
+- [x] hide computer's field
 - [ ] improove computer's shooting logic
 - [ ] get info with size of shot ship
 - [x] implement graphical interface
