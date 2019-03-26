@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <functional>   //bind
 #include <random>
 #include <cstdlib>      //abs
 #include <ctime>
@@ -16,7 +15,10 @@ class BattleshipComputer : public Battleship
     bool generateShip(int len);
     bool checkSurrounding(int x, int y);
 public:
+    BattleshipComputer();
     void fillComputerField();
     std::pair <int, int> computerShot(Battleship& player);
+    void setVisibleField(int x, int y, int val);
+    int getVisibleFieldInfo(int x, int y);
 };
     

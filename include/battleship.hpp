@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <functional>   //bind
 #include <random>
 #include <cstdlib>      //abs
 #include <ctime>
@@ -14,6 +13,7 @@ class Battleship
 protected:
     int _fieldSize;
     std::vector<std::vector<int>> battleField; 
+    void fillWithZeros(std::vector<std::vector<int>>& field, int vSize);
 public:
     Battleship ();
     ~Battleship ();
@@ -22,6 +22,5 @@ public:
     bool shoot(int x, int y);
     bool checkIfWon();
     void showField();
-    int getFieldSize();
 };
     

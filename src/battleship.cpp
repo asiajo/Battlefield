@@ -3,13 +3,7 @@
 Battleship::Battleship()
 {
     _fieldSize = 12;
-    battleField.resize(_fieldSize);
-    battleField.resize(_fieldSize);
-    for(int i =0; i<_fieldSize; i++)
-    {
-        battleField[i].resize(_fieldSize, 0); 
-        battleField[i].resize(_fieldSize, 0); 
-    }
+    fillWithZeros(battleField, _fieldSize);
 }
 
 Battleship::~Battleship(){}
@@ -69,4 +63,11 @@ void Battleship::showField()
             std::cout << e;
         }
     std::cout << std::endl;});
+}
+
+void Battleship::fillWithZeros(std::vector<std::vector<int>>& field, int vSize)
+{
+    field.resize(vSize);
+    for(int i =0; i<vSize; i++)
+        field[i].resize(vSize, 0); 
 }

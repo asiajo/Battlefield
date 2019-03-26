@@ -1,7 +1,7 @@
 #include "../include/gui.hpp"
 
 
-Gui::Gui (BattleshipComputer& computer, Battleship& player)
+Gui::Gui(BattleshipComputer& computer, Battleship& player)
 {
     
     sf::RenderWindow app(sf::VideoMode(w*12*2, w*12), "Battleship");
@@ -36,6 +36,7 @@ Gui::Gui (BattleshipComputer& computer, Battleship& player)
                                 {
                                     std::pair <int, int> shipPos = computer.computerShot(player);
                                     computer.shoot(x,y);
+                                    computer.setVisibleField(x,y,computer.getFieldInfo(x, y));
                                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
                                     player.shoot(shipPos.first, shipPos.second);
                                 }
@@ -51,8 +52,22 @@ Gui::Gui (BattleshipComputer& computer, Battleship& player)
         }
 
         app.clear(sf::Color::White);
-        setGraphic(s, app, computer, 0);
-        setGraphic(s, app, player, 12);
+        for (int i=1;i<=10;i++)
+            for (int j=1;j<=10;j++)
+            {
+                s.setTextureRect(sf::IntRect(
+                computer.getVisibleFieldInfo(i, j)*w,0,w,w));
+                s.setPosition(i*w, j*w);
+                app.draw(s);
+            }
+        for (int i=1;i<=10;i++)
+            for (int j=1;j<=10;j++)
+            {
+                s.setTextureRect(sf::IntRect(
+                player.getFieldInfo(i, j)*w,0,w,w));
+                s.setPosition((i+12)*w, j*w);
+                app.draw(s);
+            }
         app.display();
         if (computer.checkIfWon()) alert("You won!");
         if (player.checkIfWon() && userSet == true) 
@@ -95,6 +110,3 @@ void Gui::alert(std::string text)
         alrt.display();
     }
 }
-
-
-
