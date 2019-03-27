@@ -26,10 +26,10 @@ Under Linux you can use attached Makefile.
 
 ## Images:
 <p align="center">
-Start screen:
-  <img src="https://user-images.githubusercontent.com/25400249/55116953-64c8e400-50e9-11e9-9b90-c24006d77cbe.png>
-When you won:
-  <img src="https://user-images.githubusercontent.com/25400249/55116968-727e6980-50e9-11e9-8c1e-1192d605a46c.png>
-When you lost:
-  <img src="https://user-images.githubusercontent.com/25400249/55116973-74e0c380-50e9-11e9-8345-b9bb56010d95.png>
+<br>Start screen:<br>
+  <img src="https://user-images.githubusercontent.com/25400249/55116953-64c8e400-50e9-11e9-9b90-c24006d77cbe.png" width="500"/>
+<br>When you won:<br>
+  <img src="https://user-images.githubusercontent.com/25400249/55116968-727e6980-50e9-11e9-8c1e-1192d605a46c.png" width="500"/>
+<br>When you lost:<br>
+  <img src="https://user-images.githubusercontent.com/25400249/55116973-74e0c380-50e9-11e9-8345-b9bb56010d95.png" width="500"/>
 </p>
