@@ -14,12 +14,22 @@ Under Linux you can use attached Makefile.
 - [x] hide computer's field
 - [ ] improove computer's shooting logic
 - [ ] get info with size of shot ship
+- [ ] allow user to set only allowed types of ships in cexpected amount and correct positions
 - [x] implement graphical interface
-- [ ] improve graphic
-  - [ ] Add background
-  - [ ] Add nicer sea
+- [x] improve graphic
+  - [x] Add background
+  - [x] Add nicer sea
   - [ ] Add welcome screen
-  - [ ] Add graphic winner screen
+  - [x] Add graphic winner screen
 - [x] add Make file
 - [x] refactor: implement SOLID principles
 
+## Images:
+<p align="center">
+Start screen:
+  <img src="https://user-images.githubusercontent.com/25400249/55116953-64c8e400-50e9-11e9-9b90-c24006d77cbe.png>
+When you won:
+  <img src="https://user-images.githubusercontent.com/25400249/55116968-727e6980-50e9-11e9-8c1e-1192d605a46c.png>
+When you lost:
+  <img src="https://user-images.githubusercontent.com/25400249/55116973-74e0c380-50e9-11e9-8345-b9bb56010d95.png>
+</p>
