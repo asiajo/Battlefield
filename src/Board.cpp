@@ -28,3 +28,22 @@ void Board::SetField(int x, int y, int val)
 {
     battleField[x][y] = val;
 }
+
+bool Board::shoot(int x, int y)
+{
+    int vSize = this -> getFieldSize();
+    if( ( x < vSize && x > 0 ) && ( y < vSize && y > 0 ) )
+    {
+        if(this -> getFieldInfo(x, y) == 1)
+        {
+           this -> SetField(x, y, 2);
+            return true;
+        }
+        else if (this -> getFieldInfo(x, y) == 0)
+        {
+            this -> SetField(x, y, 3);
+            return false;
+        }
+    }
+    return false;
+}

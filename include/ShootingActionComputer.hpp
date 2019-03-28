@@ -1,12 +1,11 @@
 #pragma once
 
 #include "../include/Board.hpp"
-#include "../include/ShootingAction.hpp"
 
 #include <random>
 
   
-struct ShootingActionComputer : public ShootingAction
+struct ShootingActionComputer
 {
     std::pair <int, int> computerShot(Board& board);
 };

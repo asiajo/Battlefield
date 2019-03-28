@@ -14,5 +14,6 @@ public:
     int getFieldInfo(int x, int y);
     int getFieldSize();
     void SetField(int x, int y, int val);
+    bool shoot(int x, int y);
 };
     

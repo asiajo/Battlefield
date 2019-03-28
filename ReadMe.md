@@ -8,6 +8,7 @@ Under construction.
 
 Under Linux you can use attached Makefile.
 
+## Unit Tests
 
 ## Planned Updates
 
@@ -23,6 +24,8 @@ Under Linux you can use attached Makefile.
   - [x] Add graphic winner screen
 - [x] add Make file
 - [x] refactor: implement SOLID principles
+- [x] add Unit Tests
+- [ ] add Makefie for Unit tests
 
 ## Images:
 <p align="center">

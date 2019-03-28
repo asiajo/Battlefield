@@ -1,5 +1,10 @@
 #include "../include/BoardComputer.hpp"
 
+BoardComputer::BoardComputer()
+{
+    fillWithZeros(hideBattleField, _fieldSize);
+    fillComputerField();
+}
 
 std::pair <int, int> BoardComputer::generatePosition(int dirX, int len)
 {
@@ -72,7 +77,3 @@ void BoardComputer::setVisibleField(int x, int y, int val)
     hideBattleField[x][y] = val;
 }
 
-BoardComputer::BoardComputer()
-{
-    fillWithZeros(hideBattleField, _fieldSize);
-}

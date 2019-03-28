@@ -21,7 +21,7 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
         displayFields(computer, player, app, s, w, sBackground);
     } while (!(app.pollEvent(e)) && app.isOpen() );
 
-    while (app.isOpen() && !( playGame.checkIfWon(computer) || (playGame.checkIfWon(player)  && userSet == true )))
+    while (app.isOpen() && !( playGame.checkIfWon(computer) || playGame.checkIfWon(player) ))
     {
         sf::Vector2i pos = sf::Mouse::getPosition(app);
         int x = pos.x/w;
@@ -36,12 +36,12 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
             {
                 if(x<12 && userSet == true)
                 {
-                    if (e.key.code == sf::Mouse::Left) 
+                    if (e.mouseButton.button == sf::Mouse::Left) 
                         playGame.shootingSession(x, y, computer, player);
                 }
                 else if(x>12 && userSet == false)
-                    if (e.key.code == sf::Mouse::Left) 
-                        if(playGame.pushShip(x-12, y, player))
+                    if (e.mouseButton.button == sf::Mouse::Left) 
+                        if(player.pushShip(x-12, y))
                         {
                             userShips++;
                             if (userShips == 20)
@@ -51,7 +51,7 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
                 displayFields(computer, player, app, s, w, sBackground);
                 if (playGame.checkIfWon(computer)) 
                     alert("You won!");
-                if (playGame.checkIfWon(player) && userSet == true) 
+                if (playGame.checkIfWon(player)) 
                     alert("You lost!");
             }
         }
