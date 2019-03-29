@@ -59,3 +59,29 @@ TEST_F(BoardComputerTest, shootComputerOutOfBoundsExpectFalse)
     int i = boardComputer.getFieldSize();
     EXPECT_EQ(false, boardComputer.shoot(i+1,i+1));
 }
+
+TEST_F(BoardComputerTest, crossedFieldsCrossesThem)
+{
+    int bSize = boardComputer.getFieldSize();
+    int x;
+    int y;
+    bool found = false;
+    for(int i =1; i < bSize-1; i++)
+        if(!found)
+            for(int j=1; j<bSize-1; j++)
+                if(!found)
+                {
+                    boardComputer.shoot(i, j);
+                    if(boardComputer.getFieldInfo(i, j) == 2)
+                        if(boardComputer.isShipShot(i, j))
+                        {
+                            x = i;
+                            y = j;
+                            found = true;
+                            break;
+                        }
+                }  
+    boardComputer.crossFields();
+    EXPECT_EQ(8, boardComputer.getFieldInfo(x+1, y));
+
+}

@@ -52,3 +52,41 @@ TEST_F(BoardUserTest, shootUserOutOfBoundsExpectFalse)
     int i = boardUser.getFieldSize();
     EXPECT_EQ(false, boardUser.shoot(i+1,i+1));
 }
+
+TEST_F(BoardUserTest, isShipShotAt33ExpectTrue)
+{
+    boardUser.pushShip(3,3);
+    boardUser.shoot(3,3);
+    EXPECT_EQ(true, boardUser.isShipShot(3,3));
+
+}
+
+TEST_F(BoardUserTest, isShipShotAt11ExpectTrue)
+{
+    boardUser.pushShip(1,1);
+    boardUser.shoot(1,1);
+    EXPECT_EQ(true, boardUser.isShipShot(1,1));
+}
+
+TEST_F(BoardUserTest, isTripleShipShotExpectTrue)
+{
+    boardUser.pushShip(1,1);
+    boardUser.pushShip(1,2);
+    boardUser.pushShip(1,3);
+    boardUser.shoot(1,1);
+    boardUser.shoot(1,2);
+    boardUser.shoot(1,3);
+    EXPECT_EQ(true, boardUser.isShipShot(1,1));
+    EXPECT_EQ(true, boardUser.isShipShot(1,2));
+}
+
+TEST_F(BoardUserTest, isTripleShipShotExpectFalse)
+{
+    boardUser.pushShip(1,1);
+    boardUser.pushShip(1,2);
+    boardUser.pushShip(1,3);
+    boardUser.shoot(1,1);
+    boardUser.shoot(1,2);
+    EXPECT_EQ(false, boardUser.isShipShot(1,1));
+    EXPECT_EQ(false, boardUser.isShipShot(1,2));
+}

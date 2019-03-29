@@ -14,7 +14,7 @@ Under Linux you can use attached Makefile.
 
 - [x] hide computer's field
 - [ ] improove computer's shooting logic
-- [ ] get info with size of shot ship
+- [x] get info with size of shot ship
 - [ ] allow user to set only allowed types of ships in cexpected amount and correct positions
 - [x] implement graphical interface
 - [x] improve graphic
@@ -32,7 +32,7 @@ Under Linux you can use attached Makefile.
 <br>Start screen:<br>
   <img src="https://user-images.githubusercontent.com/25400249/55116953-64c8e400-50e9-11e9-9b90-c24006d77cbe.png" width="500"/>
 <br>When you won:<br>
-  <img src="https://user-images.githubusercontent.com/25400249/55116968-727e6980-50e9-11e9-8c1e-1192d605a46c.png" width="500"/>
+  <img src="https://user-images.githubusercontent.com/25400249/55235324-964ac800-522d-11e9-86f0-61004968735f.png" width="500"/>
 <br>When you lost:<br>
-  <img src="https://user-images.githubusercontent.com/25400249/55116973-74e0c380-50e9-11e9-8345-b9bb56010d95.png" width="500"/>
+  <img src="https://user-images.githubusercontent.com/25400249/55235329-98ad2200-522d-11e9-9274-5ca8b31e7850.png" width="500"/>
 </p>

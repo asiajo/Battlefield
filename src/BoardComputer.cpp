@@ -77,3 +77,12 @@ void BoardComputer::setVisibleField(int x, int y, int val)
     hideBattleField[x][y] = val;
 }
 
+void BoardComputer::crossFields()
+{
+    int bSize = getFieldSize();
+
+    for (int i = 1; i < bSize-1; i++)
+        for(int j = 1; j < bSize-1; j++)
+            if (getFieldInfo(i, j) == 8)
+                setVisibleField(i, j, 8);
+}

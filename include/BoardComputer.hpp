@@ -17,4 +17,5 @@ public:
     void fillComputerField();
     void setVisibleField(int x, int y, int val);
     int getVisibleFieldInfo(int x, int y);
+    void crossFields();
 };
