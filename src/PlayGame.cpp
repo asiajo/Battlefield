@@ -1,7 +1,7 @@
 #include "../include/PlayGame.hpp"
 #include <iostream>
 
-PlayGame::PlayGame(ShootingActionComputer& ShootingActionComputer) : _ShootingActionComputer(ShootingActionComputer)
+PlayGame::PlayGame(std::shared_ptr<ShootingActionComputer> ShootingActionComputer) : _ShootingActionComputer(ShootingActionComputer)
 {}
 
 bool PlayGame::checkIfWon(Board board)
@@ -29,17 +29,11 @@ void PlayGame::shootingSession(int x, int y, BoardComputer& computerBoard, Board
             if(computerBoard.isShipShot(x, y))
                 computerBoard.crossFields();
         computerBoard.setVisibleField(x,y,computerBoard.getFieldInfo(x, y));
-
-        std::pair <int, int> shipPos = _ShootingActionComputer.computerShot(playerBoard);
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        std::pair <int, int> shipPos = _ShootingActionComputer -> computerShot(playerBoard);
         playerBoard.shoot(shipPos.first, shipPos.second);
         if(playerBoard.getFieldInfo(shipPos.first, shipPos.second) == 2) 
-        {
-            if(playerBoard.isShipShot(shipPos.first, shipPos.second))
-                    _ShootingActionComputer.clearShotShip();
-            else
-                _ShootingActionComputer.addUnshotShip(std::make_pair(shipPos.first, shipPos.second));
-        }
+            playerBoard.isShipShot(shipPos.first, shipPos.second);
     }
 }
 

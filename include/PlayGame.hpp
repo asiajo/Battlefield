@@ -11,9 +11,9 @@
 
 class PlayGame
 {
-    ShootingActionComputer& _ShootingActionComputer;
+    std::shared_ptr<ShootingActionComputer> _ShootingActionComputer;
 public:
-    PlayGame(ShootingActionComputer& ShootingActionComputer);
+    PlayGame(std::shared_ptr<ShootingActionComputer> ShootingActionComputer);
     bool checkIfWon(Board board);
     void shootingSession(int x, int y, BoardComputer& computerBoard, Board& playerBoard);
 };

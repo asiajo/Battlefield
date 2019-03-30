@@ -1,63 +1,26 @@
 #include "../include/ShootingActionComputer.hpp"
-#include <iostream>
+
 
 std::pair <int, int> ShootingActionComputer::computerShot(Board& board)
 {
-    if(!_unshotShip.empty())
-    {
-        if (_unshotShip.size() > 1)
-        {
-            if(_unshotShip[0].first == _unshotShip[1].first)
-                return checkVertical(board);
-            else if(_unshotShip[0].second == _unshotShip[1].second)
-                return checkHorizontal(board);
-        }
-        else
-        {
-            std::pair <int, int> h = checkHorizontal(board);
-            std::pair <int, int> v = checkVertical(board);
-            return h.first > v.first ? h : v;
-        }
-    }
-    
     bool flag = false;
-    int x, y;
+    int x1,y1, x2, y2, x3, y3;
+    std::pair<int, int> output;
     while (!flag)
     {
-        x = (rand() %10)+1;
-        y = (rand() %10)+1;
-        if(board.getFieldInfo(x,y) <= 1)
+        x1 = (rand() %10)+1;
+        y1 = (rand() %10)+1;
+        x2 = (rand() %10)+1;
+        y2 = (rand() %10)+1;
+        x3 = (rand() %10)+1;
+        y3 = (rand() %10)+1;
+        if(board.getFieldInfo(x1,y1) <= 1)
             flag = true;
     }
-    return std::make_pair(x, y);
+    // increase chances of computer
+    if (board.getFieldInfo(x3,y3) == 1) output = std::make_pair(x3, y3);
+    else if (board.getFieldInfo(x2,y2) == 1) output = std::make_pair(x2, y2);
+    else output = std::make_pair(x1, y1);
+    return output;
 }
 
-std::pair <int, int> ShootingActionComputer::checkHorizontal(Board& board)
-{
-    for(auto elem : _unshotShip)
-    {
-        if (board.getFieldInfo(elem.first -1, elem.second) <= 1) return std::make_pair(elem.first -1, elem.second);
-        if (board.getFieldInfo(elem.first +1, elem.second) <= 1) return std::make_pair(elem.first +1, elem.second);
-    }
-    return std::make_pair(-1, -1);
-}
-
-std::pair <int, int> ShootingActionComputer::checkVertical(Board& board)
-{
-    for(auto elem : _unshotShip)
-    {
-        if (board.getFieldInfo(elem.first, elem.second -1) <= 1) return std::make_pair(elem.first, elem.second -1);
-        if (board.getFieldInfo(elem.first, elem.second +1) <= 1) return std::make_pair(elem.first, elem.second +1);
-    }
-    return std::make_pair(-1, -1);
-}
-
-void ShootingActionComputer::addUnshotShip(std::pair <int, int> shipPart)
-{
-    _unshotShip.push_back(shipPart);
-}
-
-void ShootingActionComputer::clearShotShip()
-{
-    _unshotShip.clear();
-}
