@@ -13,7 +13,7 @@ Under Linux you can use attached Makefile.
 ## Planned Updates
 
 - [x] hide computer's field
-- [ ] improove computer's shooting logic
+- [x] improove computer's shooting logic
 - [x] get info with size of shot ship
 - [ ] allow user to set only allowed types of ships in cexpected amount and correct positions
 - [x] implement graphical interface
@@ -26,6 +26,7 @@ Under Linux you can use attached Makefile.
 - [x] refactor: implement SOLID principles
 - [x] add Unit Tests
 - [ ] add Makefie for Unit tests
+- [ ] display info with still unshot ships
 
 ## Images:
 <p align="center">
