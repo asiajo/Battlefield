@@ -75,13 +75,14 @@ void Board::checkSurroundingForShotShips(int x, int y, std::vector<std::pair<int
     checkSurroundingForShotShip(x  , y-1, ship);
 }
 
-bool Board::isShipShot(int x, int y){
+bool Board::isShipShot(int x, int y, int& shipSize){
     
     std::vector<std::pair<int, int>> ship{std::make_pair(x,y)};
     checkSurroundingForShotShips(x,y, ship);
     for(std::pair<int, int> elem : ship)
         if(!checkSurroundingForUnshotShip(elem.first, elem.second))
             return false;
+    shipSize = ship.size();
     fillSuroundingOfShotShip(ship);
     return true; 
 }

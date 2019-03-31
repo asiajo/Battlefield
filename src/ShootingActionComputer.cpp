@@ -36,8 +36,8 @@ std::pair <int, int> ShootingActionComputer::checkHorizontal(Board& board)
 {
     for(auto elem : _unshotShip)
     {
-        if (board.getFieldInfo(elem.first -1, elem.second) <= 1) return std::make_pair(elem.first -1, elem.second);
-        if (board.getFieldInfo(elem.first +1, elem.second) <= 1) return std::make_pair(elem.first +1, elem.second);
+        if (board.getFieldInfo(elem.first -1, elem.second) <= 1 && elem.first -1 != 0                       ) return std::make_pair(elem.first -1, elem.second);
+        if (board.getFieldInfo(elem.first +1, elem.second) <= 1 && elem.first +1 != board.getFieldSize()-1  ) return std::make_pair(elem.first +1, elem.second);
     }
     return std::make_pair(-1, -1);
 }
@@ -46,8 +46,8 @@ std::pair <int, int> ShootingActionComputer::checkVertical(Board& board)
 {
     for(auto elem : _unshotShip)
     {
-        if (board.getFieldInfo(elem.first, elem.second -1) <= 1) return std::make_pair(elem.first, elem.second -1);
-        if (board.getFieldInfo(elem.first, elem.second +1) <= 1) return std::make_pair(elem.first, elem.second +1);
+        if (board.getFieldInfo(elem.first, elem.second -1) <= 1 && elem.second -1 != 0                      ) return std::make_pair(elem.first, elem.second -1);
+        if (board.getFieldInfo(elem.first, elem.second +1) <= 1 && elem.second +1 != board.getFieldSize()-1 ) return std::make_pair(elem.first, elem.second +1);
     }
     return std::make_pair(-1, -1);
 }
