@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
     srand(time(0));
     BoardUser boardPlayer;
     BoardComputer boardComputer;
-    std::shared_ptr<ShootingActionComputer> shootingActionComputer;
+    ShootingActionComputer shootingActionComputer;
     
     PlayGame playGame(shootingActionComputer);
     DisplayBoardsGui displayBoardsGui(boardComputer, boardPlayer, playGame);
