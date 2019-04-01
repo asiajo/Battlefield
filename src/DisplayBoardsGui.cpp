@@ -13,23 +13,18 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
     t.loadFromFile("images/tiles.jpg");
     sf::Sprite s(t);
     sf::Event e;
-   
-    sf::Font font;
+    
     bool computerTurn = false;
     bool userTurn = true;
-
-    if (!font.loadFromFile("fonts/Ubuntu-M.ttf"))
-        std::cout << "Error loading font\n" ;
+    bool userSet = false;
+    int userShips = 0;   
+    int shipSize; 
 
     int ship4 = 1;
     int ship3 = 2;
     int ship2 = 3;
     int ship1 = 4;
     
-    bool userSet = false;
-    int userShips = 0;   
-    int shipSize; 
-
     while (app.isOpen() && !( playGame.checkIfWon(computer) || playGame.checkIfWon(player) ))
     {
         sf::Vector2i pos = sf::Mouse::getPosition(app);
@@ -45,14 +40,14 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
             if(x<11 && x>0 && y>0 && y<11 && userSet == true)
             {
                 if (e.mouseButton.button == sf::Mouse::Left) 
-                {
                     if(userTurn) 
+                    {
                         computerTurn = playGame.shootingAtComputer(x, y, computer, shipSize);
-                    if(shipSize == 4) ship4--;
-                    if(shipSize == 3) ship3--;
-                    if(shipSize == 2) ship2--;
-                    if(shipSize == 1) ship1--;
-                }
+                        if(shipSize == 4) ship4--;
+                        if(shipSize == 3) ship3--;
+                        if(shipSize == 2) ship2--;
+                        if(shipSize == 1) ship1--;
+                    }
             }
             else if(x>12 && userSet == false)
                 if (e.mouseButton.button == sf::Mouse::Left) 
@@ -62,25 +57,23 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
                         if (userShips == 20)
                             userSet = true;
                     }
-            }
-            if(computerTurn && userSet == true && x<12) 
-            {
-                userTurn = playGame.shootingByComputer(player);
-                computerTurn = !userTurn;
-            }
-            app.clear(sf::Color::White);
-            app.draw(sBackground);
-            displayShipsCounter(app, font, ship4, ship3, ship2, ship1);
-            displayFields(computer, player, app, s, w);
-            
-            if (playGame.checkIfWon(computer)) 
-                alert("You won!");
-            else if (playGame.checkIfWon(player)) 
-                alert("You lost!");  
         }
+        if(computerTurn && userSet == true && x<12) 
+        {
+            userTurn = playGame.shootingByComputer(player);
+            computerTurn = !userTurn;
+        }
+        app.clear(sf::Color::White);
+        app.draw(sBackground);
+        displayShipsCounter(app, ship4, ship3, ship2, ship1);
+        displayFields(computer, player, app, s, w);
+        
+        if (playGame.checkIfWon(computer)) 
+            alert("You won!");
+        else if (playGame.checkIfWon(player)) 
+            alert("You lost!");  
     }
-
-
+}
 
 void DisplayBoardsGui::alert(std::string text)
 {
@@ -141,10 +134,13 @@ void DisplayBoardsGui::displayFields(BoardComputer& computer, BoardUser& player,
     app.display();    
 }
 
-void DisplayBoardsGui::displayShipsCounter(sf::RenderWindow& app, sf::Font font, int ship4, int ship3, int ship2, int ship1)
+void DisplayBoardsGui::displayShipsCounter(sf::RenderWindow& app, int ship4, int ship3, int ship2, int ship1)
 {
     app.pushGLStates();
 
+    sf::Font font;
+    if (!font.loadFromFile("fonts/Ubuntu-M.ttf"))
+        std::cout << "Error loading font\n" ;
     std::ostringstream ss;
     ss << ship4 << " \n" << ship3 << " \n" << ship2 << " \n" << ship1 << std::endl;
     sf::Text atext;

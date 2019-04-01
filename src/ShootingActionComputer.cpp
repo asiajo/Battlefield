@@ -11,15 +11,15 @@ std::pair <int, int> ShootingActionComputer::computerShot(Board& board)
             if(_unshotShip[0].first == _unshotShip[1].first)
             {
                 std::pair <int, int> v = checkVertical(board);
-                std::pair <int, int> h = checkHorizontal(board);
-                return h.first > v.first ? h : v;
+                if(v.first != -1) return v;
+                return checkHorizontal(board);
 
             }
             else if(_unshotShip[0].second == _unshotShip[1].second)
             {
                 std::pair <int, int> h = checkHorizontal(board);
-                std::pair <int, int> v = checkVertical(board);
-                return h.first > v.first ? h : v;
+                if(h.first != -1) return h;
+                return checkVertical(board);
             }
         }
         else

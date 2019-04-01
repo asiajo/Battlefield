@@ -6,11 +6,12 @@ Board::Board()
     fillWithZeros(battleField, _fieldSize);
 }
 
+Board::~Board(){}
+
 void Board::fillWithZeros(std::vector<std::vector<int>>& field, int vSize)
 {
     field.resize(vSize);
-    for(int i =0; i<vSize; i++)
-        field[i].resize(vSize, 0);
+    std::for_each(begin(field), end(field), [&](std::vector<int> &f){ f.resize(vSize, 0); });
 }
 
 int Board::getFieldInfo(int x, int y)

@@ -15,6 +15,7 @@ protected:
     void fillSuroundingOfShotShip(std::vector<std::pair<int, int>>& ship);
 public:
     Board();
+    virtual ~Board() = 0;
     int getFieldInfo(int x, int y);
     int getFieldSize();
     void SetField(int x, int y, int val);

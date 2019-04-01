@@ -4,7 +4,7 @@
 PlayGame::PlayGame(ShootingActionComputer& ShootingActionComputer) : _ShootingActionComputer(ShootingActionComputer)
 {}
 
-bool PlayGame::checkIfWon(Board board)
+bool PlayGame::checkIfWon(Board& board)
 {
     int bSize = board.getFieldSize();
 
