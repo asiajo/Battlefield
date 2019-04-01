@@ -2,8 +2,6 @@
 
 Uses SFML library.
 
-Under construction.
-
 ## Compilation
 
 Under Linux you can use attached Makefile.
@@ -15,12 +13,10 @@ Under Linux you can use attached Makefile.
 - [x] hide computer's field
 - [x] improove computer's shooting logic
 - [x] get info with size of shot ship
-- [ ] allow user to set only allowed types of ships in cexpected amount and correct positions
 - [x] implement graphical interface
 - [x] improve graphic
   - [x] Add background
   - [x] Add nicer sea
-  - [ ] Add welcome screen
   - [x] Add graphic winner screen
 - [x] add Make file
 - [x] refactor: implement SOLID principles
