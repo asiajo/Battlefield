@@ -20,7 +20,8 @@ bool PlayGame::checkIfWon(Board board)
     return false;
 }
 
-void PlayGame::shootingSession(int x, int y, BoardComputer& computerBoard, Board& playerBoard, int& shipSize)
+
+bool PlayGame::shootingAtComputer(int x, int y, BoardComputer& computerBoard, int& shipSize)
 {
     shipSize = 0;
     if(computerBoard.getFieldInfo(x,y)<=1)
@@ -30,18 +31,28 @@ void PlayGame::shootingSession(int x, int y, BoardComputer& computerBoard, Board
             if(computerBoard.isShipShot(x, y, shipSize))
                 computerBoard.crossFields();
         computerBoard.setVisibleField(x,y,computerBoard.getFieldInfo(x, y));
-
-        int myShipSize;
-        std::pair <int, int> shipPos = _ShootingActionComputer.computerShot(playerBoard);
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
-        playerBoard.shoot(shipPos.first, shipPos.second);
-        if(playerBoard.getFieldInfo(shipPos.first, shipPos.second) == 2) 
-        {
-            if(playerBoard.isShipShot(shipPos.first, shipPos.second, myShipSize))
-                    _ShootingActionComputer.clearShotShip();
-            else
-                _ShootingActionComputer.addUnshotShip(std::make_pair(shipPos.first, shipPos.second));
-        }
+        if(computerBoard.getFieldInfo(x,y)==2)
+            return false;
+        else
+            return true;
     }
+    return false;
 }
 
+bool PlayGame::shootingByComputer(Board& playerBoard)
+{
+    int myShipSize;
+    std::pair <int, int> shipPos = _ShootingActionComputer.computerShot(playerBoard);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    playerBoard.shoot(shipPos.first, shipPos.second);
+    if(playerBoard.getFieldInfo(shipPos.first, shipPos.second) == 2) 
+    {
+        if(playerBoard.isShipShot(shipPos.first, shipPos.second, myShipSize))
+                _ShootingActionComputer.clearShotShip();
+        else
+            _ShootingActionComputer.addUnshotShip(std::make_pair(shipPos.first, shipPos.second));
+        return false;
+    }
+    else
+        return true;
+}

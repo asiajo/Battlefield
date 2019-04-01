@@ -66,6 +66,7 @@ TEST_F(BoardComputerTest, crossedFieldsCrossesThem)
     int x;
     int y;
     bool found = false;
+    int shipSize =0;
     for(int i =1; i < bSize-1; i++)
         if(!found)
             for(int j=1; j<bSize-1; j++)
@@ -73,7 +74,7 @@ TEST_F(BoardComputerTest, crossedFieldsCrossesThem)
                 {
                     boardComputer.shoot(i, j);
                     if(boardComputer.getFieldInfo(i, j) == 2)
-                        if(boardComputer.isShipShot(i, j))
+                        if(boardComputer.isShipShot(i, j, shipSize))
                         {
                             x = i;
                             y = j;

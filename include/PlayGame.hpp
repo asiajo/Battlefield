@@ -15,5 +15,6 @@ class PlayGame
 public:
     PlayGame(ShootingActionComputer& ShootingActionComputer);
     bool checkIfWon(Board board);
-    void shootingSession(int x, int y, BoardComputer& computerBoard, Board& playerBoard, int& shipSize);
+    bool shootingAtComputer(int x, int y, BoardComputer& computerBoard, int& shipSize);
+    bool shootingByComputer(Board& playerBoard);
 };

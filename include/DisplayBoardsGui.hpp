@@ -12,7 +12,7 @@ class DisplayBoardsGui
 {
     int w = 50; 
     void alert(std::string text);
-    void displayFields(BoardComputer& computer, BoardUser& player, sf::RenderWindow& app, sf::Sprite& s, int w, sf::Sprite sBackground, sf::Font font, int ship4, int ship3, int ship2, int ship1);
+    void displayFields(BoardComputer& computer, BoardUser& player, sf::RenderWindow& app, sf::Sprite& s, int w);
     void displayShipsCounter(sf::RenderWindow& app, sf::Font font, int ship4, int ship3, int ship2, int ship1);
 public:
     DisplayBoardsGui(BoardComputer& computer, BoardUser& player, PlayGame& playGame);

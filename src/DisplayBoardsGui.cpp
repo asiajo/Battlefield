@@ -13,7 +13,10 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
     t.loadFromFile("images/tiles.jpg");
     sf::Sprite s(t);
     sf::Event e;
+   
     sf::Font font;
+    bool computerTurn = false;
+    bool userTurn = true;
 
     if (!font.loadFromFile("fonts/Ubuntu-M.ttf"))
         std::cout << "Error loading font\n" ;
@@ -27,81 +30,87 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
     int userShips = 0;   
     int shipSize; 
 
-    displayFields(computer, player, app, s, w, sBackground, font, ship4, ship3, ship2, ship1);
-
     while (app.isOpen() && !( playGame.checkIfWon(computer) || playGame.checkIfWon(player) ))
     {
         sf::Vector2i pos = sf::Mouse::getPosition(app);
         int x = pos.x/w;
         int y = pos.y/w-4;
+        app.pollEvent(e);
 
-        while (app.pollEvent(e))
+        if (e.type == sf::Event::Closed)
+            app.close();
+
+        if (e.type == sf::Event::MouseButtonPressed)
         {
-            if (e.type == sf::Event::Closed)
-                app.close();
-
-   			if (e.type == sf::Event::MouseButtonPressed)
+            if(x<11 && x>0 && y>0 && y<11 && userSet == true)
             {
-                if(x<12 && userSet == true)
+                if (e.mouseButton.button == sf::Mouse::Left) 
                 {
-                    if (e.mouseButton.button == sf::Mouse::Left) 
-                    {
-                        playGame.shootingSession(x, y, computer, player, shipSize);
-                        if(shipSize == 4) ship4--;
-                        if(shipSize == 3) ship3--;
-                        if(shipSize == 2) ship2--;
-                        if(shipSize == 1) ship1--;
-                    }
+                    if(userTurn) 
+                        computerTurn = playGame.shootingAtComputer(x, y, computer, shipSize);
+                    if(shipSize == 4) ship4--;
+                    if(shipSize == 3) ship3--;
+                    if(shipSize == 2) ship2--;
+                    if(shipSize == 1) ship1--;
                 }
-                else if(x>12 && userSet == false)
-                    if (e.mouseButton.button == sf::Mouse::Left) 
-                        if(player.pushShip(x-12, y))
-                        {
-                            userShips++;
-                            if (userShips == 20)
-                                userSet = true;
-                        }
-                displayFields(computer, player, app, s, w, sBackground, font, ship4, ship3, ship2, ship1);
-                if (playGame.checkIfWon(computer)) 
-                    alert("You won!");
-                else if (playGame.checkIfWon(player)) 
-                    alert("You lost!");
             }
+            else if(x>12 && userSet == false)
+                if (e.mouseButton.button == sf::Mouse::Left) 
+                    if(player.pushShip(x-12, y))
+                    {
+                        userShips++;
+                        if (userShips == 20)
+                            userSet = true;
+                    }
+            }
+            if(computerTurn && userSet == true && x<12) 
+            {
+                userTurn = playGame.shootingByComputer(player);
+                computerTurn = !userTurn;
+            }
+            app.clear(sf::Color::White);
+            app.draw(sBackground);
+            displayShipsCounter(app, font, ship4, ship3, ship2, ship1);
+            displayFields(computer, player, app, s, w);
+            
+            if (playGame.checkIfWon(computer)) 
+                alert("You won!");
+            else if (playGame.checkIfWon(player)) 
+                alert("You lost!");  
         }
     }
-}
+
 
 
 void DisplayBoardsGui::alert(std::string text)
 {
     sf::RenderWindow alrt(sf::VideoMode(400, 400), text);
-    sf::Texture t;
-    if(text == "You won!")
-        t.loadFromFile("images/youWon.jpg");
-    else if(text == "You lost!")
-        t.loadFromFile("images/youLost.jpg");
-    sf::Sprite s(t);
-
     while (alrt.isOpen())
     {
-        alrt.clear(sf::Color::White);
-        alrt.draw(s);
-        sf::Event e;
-        while (alrt.pollEvent(e))
+        sf::Texture t;
+        if(text == "You won!")
+            t.loadFromFile("images/youWon.jpg");
+        else if(text == "You lost!")
+            t.loadFromFile("images/youLost.jpg");
+        sf::Sprite s(t);
+
+        while (alrt.isOpen())
         {
-            if (e.type == sf::Event::Closed)
-                alrt.close();
+            alrt.clear(sf::Color::White);
+            alrt.draw(s);
+            sf::Event e;
+            while (alrt.pollEvent(e))
+            {
+                if (e.type == sf::Event::Closed)
+                    alrt.close();
+            }
+            alrt.display();
         }
-        alrt.display();
     }
 }
 
-void DisplayBoardsGui::displayFields(BoardComputer& computer, BoardUser& player, sf::RenderWindow& app, sf::Sprite& s, int w, sf::Sprite sBackground, sf::Font font, int ship4, int ship3, int ship2, int ship1)
+void DisplayBoardsGui::displayFields(BoardComputer& computer, BoardUser& player, sf::RenderWindow& app, sf::Sprite& s, int w)
 {
-    app.clear(sf::Color::White);
-    app.draw(sBackground);
-    displayShipsCounter(app, font, ship4, ship3, ship2, ship1);
-
     for (int i=1;i<=10;i++)
         for (int j=1;j<=10;j++)
         {
@@ -129,8 +138,7 @@ void DisplayBoardsGui::displayFields(BoardComputer& computer, BoardUser& player,
             s.setPosition((i+12)*w, (j+4)*w);
             app.draw(s);
         }
-        
-    app.display();
+    app.display();    
 }
 
 void DisplayBoardsGui::displayShipsCounter(sf::RenderWindow& app, sf::Font font, int ship4, int ship3, int ship2, int ship1)

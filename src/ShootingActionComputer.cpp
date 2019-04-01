@@ -5,12 +5,22 @@ std::pair <int, int> ShootingActionComputer::computerShot(Board& board)
 {
     if(!_unshotShip.empty())
     {
+        // need to be simplified after implementation of correct user input
         if (_unshotShip.size() > 1)
         {
             if(_unshotShip[0].first == _unshotShip[1].first)
-                return checkVertical(board);
+            {
+                std::pair <int, int> v = checkVertical(board);
+                std::pair <int, int> h = checkHorizontal(board);
+                return h.first > v.first ? h : v;
+
+            }
             else if(_unshotShip[0].second == _unshotShip[1].second)
-                return checkHorizontal(board);
+            {
+                std::pair <int, int> h = checkHorizontal(board);
+                std::pair <int, int> v = checkVertical(board);
+                return h.first > v.first ? h : v;
+            }
         }
         else
         {

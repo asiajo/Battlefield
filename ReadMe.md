@@ -27,6 +27,7 @@ Under Linux you can use attached Makefile.
 - [x] add Unit Tests
 - [ ] add Makefie for Unit tests
 - [x] display info with still unshot ships
+- [x] add additional shot if part of ship was shot (skip the round of the enemy)
 
 ## Images:
 <p align="center">

@@ -9,7 +9,7 @@ class PlayGameTest : public ::testing::Test
 public:
     BoardComputer bc;
     BoardUser bu;
-    std::shared_ptr<ShootingActionComputer> actionComputer;
+    ShootingActionComputer actionComputer;
     PlayGame pg{actionComputer};
 };
 
@@ -24,11 +24,18 @@ TEST_F(PlayGameTest, checkIfUserWonExpectFalse)
     EXPECT_EQ(false, pg.checkIfWon(bu));
 }
 
-TEST_F(PlayGameTest, checkIfBothBoardsAreChangedAfterShootingSession)
+TEST_F(PlayGameTest, checkIfComputersBoardIsChangedAfterShootingSession)
 {
-    pg.shootingSession(1, 1, bc, bu);
+    int shipSize=0;
+    pg.shootingAtComputer(1, 1, bc, shipSize);
     EXPECT_EQ(3, bc.getFieldInfo(1,1));
     EXPECT_EQ(3, bc.getVisibleFieldInfo(1,1));
+    
+}
+
+TEST_F(PlayGameTest, checkIfUserBoardIsChangedAfterShootingSession)
+{
+    pg.shootingByComputer(bu);
     int bSize = bu.getFieldSize();
     int fieldsShot = 0;
     for (int i = 1; i < bSize-1; i++)
