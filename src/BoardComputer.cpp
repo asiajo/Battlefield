@@ -23,7 +23,7 @@ std::pair <int, int> BoardComputer::generatePosition(int dirX, int len)
     return std::make_pair(x,y);
 }
 
-bool BoardComputer::checkSurrounding(int x, int y)
+bool BoardComputer::checkSurrounding(int x, int y) const
 {
     for(int i = x-1; i<=x+1; i++)
         for(int j = y-1; j<=y+1; j++)
@@ -31,7 +31,6 @@ bool BoardComputer::checkSurrounding(int x, int y)
                 return false;
     return true;
 }
-
 
 bool BoardComputer::generateShip(int len)
 {
@@ -65,7 +64,7 @@ void BoardComputer::fillComputerField()
     }
 }
 
-int BoardComputer::getVisibleFieldInfo(int x, int y)
+int BoardComputer::getVisibleFieldInfo(int x, int y) const
 {
     if( ( x < _fieldSize && x > 0 ) && ( y < _fieldSize && y > 0 ) )
         return hideBattleField[x][y];

@@ -14,7 +14,7 @@ class PlayGame
     ShootingActionComputer& _ShootingActionComputer;
 public:
     PlayGame(ShootingActionComputer& ShootingActionComputer);
-    bool checkIfWon(Board& board);
+    bool checkIfWon(const Board& board) const;
     bool shootingAtComputer(int x, int y, BoardComputer& computerBoard, int& shipSize);
     bool shootingByComputer(Board& playerBoard);
 };

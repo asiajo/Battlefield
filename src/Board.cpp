@@ -14,14 +14,14 @@ void Board::fillWithZeros(std::vector<std::vector<int>>& field, int vSize)
     std::for_each(begin(field), end(field), [&](std::vector<int> &f){ f.resize(vSize, 0); });
 }
 
-int Board::getFieldInfo(int x, int y)
+int Board::getFieldInfo(int x, int y) const
 {
     if( ( x < _fieldSize && x > 0 ) && ( y < _fieldSize && y > 0 ) )
         return battleField[x][y];
     else return -1;
 }
 
-int Board::getFieldSize()
+int Board::getFieldSize() const
 {
     return _fieldSize;
 }
@@ -50,7 +50,7 @@ bool Board::shoot(int x, int y)
     return false;
 }
 
-bool Board::checkSurroundingForUnshotShip(int x, int y)
+bool Board::checkSurroundingForUnshotShip(int x, int y) const
 {
     if(getFieldInfo(x+1, y  ) == 1) return false;
     if(getFieldInfo(x-1, y  ) == 1) return false;
@@ -76,8 +76,8 @@ void Board::checkSurroundingForShotShips(int x, int y, std::vector<std::pair<int
     checkSurroundingForShotShip(x  , y-1, ship);
 }
 
-bool Board::isShipShot(int x, int y, int& shipSize){
-    
+bool Board::isShipShot(int x, int y, int& shipSize)
+{   
     std::vector<std::pair<int, int>> ship{std::make_pair(x,y)};
     checkSurroundingForShotShips(x,y, ship);
     for(std::pair<int, int> elem : ship)
@@ -91,7 +91,8 @@ bool Board::isShipShot(int x, int y, int& shipSize){
 void Board::fillSuroundingOfShotShip(std::vector<std::pair<int, int>>& ship)
 {
     for(std::pair<int, int> elem : ship)
-    {   int x = elem.first;
+    {   
+        int x = elem.first;
         int y = elem.second;
         if(getFieldInfo(x+1, y  ) == 0) SetField(x+1, y  , 8);
         if(getFieldInfo(x-1, y  ) == 0) SetField(x-1, y  , 8);

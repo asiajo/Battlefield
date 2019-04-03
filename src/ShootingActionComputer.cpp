@@ -1,7 +1,7 @@
 #include "../include/ShootingActionComputer.hpp"
 #include <iostream>
 
-std::pair <int, int> ShootingActionComputer::computerShot(Board& board)
+std::pair <int, int> ShootingActionComputer::computerShot(const Board& board) const
 {
     if(!_unshotShip.empty())
     {
@@ -42,7 +42,7 @@ std::pair <int, int> ShootingActionComputer::computerShot(Board& board)
     return std::make_pair(x, y);
 }
 
-std::pair <int, int> ShootingActionComputer::checkHorizontal(Board& board)
+std::pair <int, int> ShootingActionComputer::checkHorizontal(const Board& board) const 
 {
     for(auto elem : _unshotShip)
     {
@@ -52,7 +52,7 @@ std::pair <int, int> ShootingActionComputer::checkHorizontal(Board& board)
     return std::make_pair(-1, -1);
 }
 
-std::pair <int, int> ShootingActionComputer::checkVertical(Board& board)
+std::pair <int, int> ShootingActionComputer::checkVertical(const Board& board) const 
 {
     for(auto elem : _unshotShip)
     {

@@ -6,6 +6,7 @@ DisplayBoardsGui::DisplayBoardsGui(BoardComputer& computer, BoardUser& player, P
 {
     
     sf::RenderWindow app(sf::VideoMode(w*12*2, w*12+w*4), "Battleship");
+    app.setFramerateLimit(90);
     sf::Texture background;
     background.loadFromFile("images/background.jpg");
     sf::Sprite sBackground(background);
@@ -102,7 +103,7 @@ void DisplayBoardsGui::alert(std::string text)
     }
 }
 
-void DisplayBoardsGui::displayFields(BoardComputer& computer, BoardUser& player, sf::RenderWindow& app, sf::Sprite& s, int w)
+void DisplayBoardsGui::displayFields(const BoardComputer& computer, const BoardUser& player, sf::RenderWindow& app, sf::Sprite& s, int w)
 {
     for (int i=1;i<=10;i++)
         for (int j=1;j<=10;j++)

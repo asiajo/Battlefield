@@ -4,7 +4,7 @@
 PlayGame::PlayGame(ShootingActionComputer& ShootingActionComputer) : _ShootingActionComputer(ShootingActionComputer)
 {}
 
-bool PlayGame::checkIfWon(Board& board)
+bool PlayGame::checkIfWon(const Board& board) const
 {
     int bSize = board.getFieldSize();
 
@@ -43,7 +43,7 @@ bool PlayGame::shootingByComputer(Board& playerBoard)
 {
     int myShipSize;
     std::pair <int, int> shipPos = _ShootingActionComputer.computerShot(playerBoard);
-    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     playerBoard.shoot(shipPos.first, shipPos.second);
     if(playerBoard.getFieldInfo(shipPos.first, shipPos.second) == 2) 
     {
