@@ -24,6 +24,8 @@ Under Linux you can use attached Makefile.
 - [ ] add Makefie for Unit tests
 - [x] display info with still unshot ships
 - [x] add additional shot if part of ship was shot (skip the round of the enemy)
+- [ ] add enums for field information
+- [ ] organize Gui class
 
 ## Images:
 <p align="center">
