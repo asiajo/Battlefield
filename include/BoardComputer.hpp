@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../include/Board.hpp"
+#include "Board.hpp"
+#include "Position.hpp"
 
 #include <random>
 #include <cstdlib>      //abs
@@ -8,14 +9,14 @@
 
 class BoardComputer : public Board
 {
-    std::vector<std::vector<int>> hideBattleField; 
-    std::pair <int, int> generatePosition(int dirX, int len);
-    bool generateShip(int len);
-    bool checkSurrounding(int x, int y) const;
+    std::vector<std::vector<FieldStatus>> hideBattleField; 
+    Position generatePosition(const int dirX, const int len);
+    bool generateShip(const int len);
+    bool checkSurrounding(const Position& p) const;
+    void fillComputerField();
 public:
     BoardComputer();
-    void fillComputerField();
-    void setVisibleField(int x, int y, int val);
-    int getVisibleFieldInfo(int x, int y) const;
     void crossFields();
+    void setVisibleField(const Position& p, const FieldStatus val);
+    FieldStatus getVisibleFieldInfo(const Position& p) const;
 };

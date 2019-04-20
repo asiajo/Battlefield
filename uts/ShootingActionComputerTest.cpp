@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "../include/ShootingActionComputer.hpp"
 #include "../include/BoardUser.hpp"
+#include "../include/Position.hpp"
 
 class ShootingActionComputerTest : public ::testing::Test
 {
@@ -13,9 +14,9 @@ public:
 
 TEST_F(ShootingActionComputerTest, computerShotExpect0_LT_XandY_LT_fieldSize)
 {
-    std::pair <int, int> shot = actionComputer.computerShot(bu);
-    EXPECT_GT(bu.getFieldSize(), shot.first);
-    EXPECT_GT(bu.getFieldSize(), shot.second);
-    EXPECT_LT(0, shot.first);
-    EXPECT_LT(0, shot.second);
+    Position shot = actionComputer.computerShot(bu);
+    EXPECT_GT(bu.getFieldSize(), shot.x);
+    EXPECT_GT(bu.getFieldSize(), shot.y);
+    EXPECT_LT(0, shot.x);
+    EXPECT_LT(0, shot.y);
 }

@@ -6,7 +6,7 @@ BoardComputer::BoardComputer()
     fillComputerField();
 }
 
-std::pair <int, int> BoardComputer::generatePosition(int dirX, int len)
+Position BoardComputer::generatePosition(const int dirX, const int len)
 {
     int x;
     int y;
@@ -20,14 +20,15 @@ std::pair <int, int> BoardComputer::generatePosition(int dirX, int len)
         x = (rand() %10)+1;
         y = (rand() %(10-len))+1;
     }
-    return std::make_pair(x,y);
+    Position p = {x,y};
+    return p;
 }
 
-bool BoardComputer::checkSurrounding(int x, int y) const
+bool BoardComputer::checkSurrounding(const Position& p) const
 {
-    for(int i = x-1; i<=x+1; i++)
-        for(int j = y-1; j<=y+1; j++)
-            if (battleField[i][j] == 1)
+    for(int i = p.x-1; i<=p.x+1; i++)
+        for(int j = p.y-1; j<=p.y+1; j++)
+            if (battleField[i][j] == FieldStatus::SHIP)
                 return false;
     return true;
 }
@@ -36,17 +37,18 @@ bool BoardComputer::generateShip(int len)
 {
     int dirX = (rand() %2);
     int dirY = abs(dirX-1);
-    std::pair <int, int> pos = generatePosition(dirX, len);
-    int x = pos.first;
-    int y = pos.second;
+    Position pos = generatePosition(dirX, len);
     bool isCorrect = true;
     for(int i = 0; i < len; i++)
-        if (!checkSurrounding(pos.first+dirX*i, pos.second+dirY*i))
+    {
+        Position p = {pos.x + dirX*i, pos.y + dirY*i};
+        if (!checkSurrounding(p))
             isCorrect = false;
+    }
     if (isCorrect)
     {
         for(int i=0; i<len; i++)
-            battleField[x+dirX*i][y+dirY*i] = 1;
+            battleField[pos.x+dirX*i][pos.y+dirY*i] = FieldStatus::SHIP;
         return true;
     }
     return false;
@@ -64,16 +66,16 @@ void BoardComputer::fillComputerField()
     }
 }
 
-int BoardComputer::getVisibleFieldInfo(int x, int y) const
+FieldStatus BoardComputer::getVisibleFieldInfo(const Position& p) const
 {
-    if( ( x < _fieldSize && x > 0 ) && ( y < _fieldSize && y > 0 ) )
-        return hideBattleField[x][y];
-    else return -1;
+    if( ( p.x < _fieldSize && p.x > 0 ) && ( p.y < _fieldSize && p.y > 0 ) )
+        return hideBattleField[p.x][p.y];
+    else return FieldStatus::OUT_OF_BOUNDS;
 }
 
-void BoardComputer::setVisibleField(int x, int y, int val)
+void BoardComputer::setVisibleField(const Position& p, const FieldStatus val)
 {
-    hideBattleField[x][y] = val;
+    hideBattleField[p.x][p.y] = val;
 }
 
 void BoardComputer::crossFields()
@@ -82,6 +84,9 @@ void BoardComputer::crossFields()
 
     for (int i = 1; i < bSize-1; i++)
         for(int j = 1; j < bSize-1; j++)
-            if (getFieldInfo(i, j) == 8)
-                setVisibleField(i, j, 8);
+        {
+            Position p = {i, j};
+            if (getFieldInfo(p) == FieldStatus::SHIP_SURROUNDING)
+                setVisibleField(p, FieldStatus::SHIP_SURROUNDING);
+        }
 }

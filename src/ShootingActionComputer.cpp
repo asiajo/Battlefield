@@ -1,32 +1,32 @@
 #include "../include/ShootingActionComputer.hpp"
 #include <iostream>
 
-std::pair <int, int> ShootingActionComputer::computerShot(const Board& board) const
+Position ShootingActionComputer::computerShot(const Board& board) const
 {
     if(!_unshotShip.empty())
     {
         // need to be simplified after implementation of correct user input
         if (_unshotShip.size() > 1)
         {
-            if(_unshotShip[0].first == _unshotShip[1].first)
+            if(_unshotShip[0].x == _unshotShip[1].x)
             {
-                std::pair <int, int> v = checkVertical(board);
-                if(v.first != -1) return v;
+                Position v = checkVertical(board);
+                if(v.x != -1) return v;
                 return checkHorizontal(board);
 
             }
-            else if(_unshotShip[0].second == _unshotShip[1].second)
+            else if(_unshotShip[0].y == _unshotShip[1].y)
             {
-                std::pair <int, int> h = checkHorizontal(board);
-                if(h.first != -1) return h;
+                Position h = checkHorizontal(board);
+                if(h.y != -1) return h;
                 return checkVertical(board);
             }
         }
         else
         {
-            std::pair <int, int> h = checkHorizontal(board);
-            std::pair <int, int> v = checkVertical(board);
-            return h.first > v.first ? h : v;
+            Position h = checkHorizontal(board);
+            Position v = checkVertical(board);
+            return h.x > v.x ? h : v;
         }
     }
     
@@ -36,33 +36,49 @@ std::pair <int, int> ShootingActionComputer::computerShot(const Board& board) co
     {
         x = (rand() %10)+1;
         y = (rand() %10)+1;
-        if(board.getFieldInfo(x,y) <= 1)
+        Position p = {x, y};
+        if(board.getFieldInfo(p) == FieldStatus::FREE || board.getFieldInfo(p) == FieldStatus::SHIP)
             flag = true;
     }
-    return std::make_pair(x, y);
+    Position p = {x,y};
+    return p;
 }
 
-std::pair <int, int> ShootingActionComputer::checkHorizontal(const Board& board) const 
+Position ShootingActionComputer::checkHorizontal(const Board& board) const 
 {
-    for(auto elem : _unshotShip)
+    for(auto pos : _unshotShip)
     {
-        if (board.getFieldInfo(elem.first -1, elem.second) <= 1 && elem.first -1 != 0                       ) return std::make_pair(elem.first -1, elem.second);
-        if (board.getFieldInfo(elem.first +1, elem.second) <= 1 && elem.first +1 != board.getFieldSize()-1  ) return std::make_pair(elem.first +1, elem.second);
+        Position p1 = {pos.x - 1, pos.y};
+        if ((board.getFieldInfo(p1) == FieldStatus::FREE || 
+             board.getFieldInfo(p1) == FieldStatus::SHIP) 
+             && p1.x != 0                       ) return p1;
+        Position p2 = {pos.x + 1, pos.y};
+        if ((board.getFieldInfo(p2) == FieldStatus::FREE || 
+             board.getFieldInfo(p2) == FieldStatus::SHIP) 
+             && p2.x != board.getFieldSize()-1  ) return p2;
     }
-    return std::make_pair(-1, -1);
+    Position p0 = {-1, -1};
+    return p0;
 }
 
-std::pair <int, int> ShootingActionComputer::checkVertical(const Board& board) const 
+Position ShootingActionComputer::checkVertical(const Board& board) const 
 {
-    for(auto elem : _unshotShip)
+    for(auto pos : _unshotShip)
     {
-        if (board.getFieldInfo(elem.first, elem.second -1) <= 1 && elem.second -1 != 0                      ) return std::make_pair(elem.first, elem.second -1);
-        if (board.getFieldInfo(elem.first, elem.second +1) <= 1 && elem.second +1 != board.getFieldSize()-1 ) return std::make_pair(elem.first, elem.second +1);
+        Position p1 = {pos.x, pos.y-1};
+        if ((board.getFieldInfo(p1) == FieldStatus::FREE || 
+             board.getFieldInfo(p1) == FieldStatus::SHIP) 
+             && p1.y != 0                      ) return p1;
+        Position p2 = {pos.x, pos.y+1};
+        if ((board.getFieldInfo(p2) == FieldStatus::FREE || 
+             board.getFieldInfo(p2) == FieldStatus::SHIP) 
+             && p2.y != board.getFieldSize()-1 ) return p2;
     }
-    return std::make_pair(-1, -1);
+    Position p0 = {-1, -1};
+    return p0;
 }
 
-void ShootingActionComputer::addUnshotShip(std::pair <int, int> shipPart)
+void ShootingActionComputer::addUnshotShip(const Position& shipPart)
 {
     _unshotShip.push_back(shipPart);
 }

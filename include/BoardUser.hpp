@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../include/Board.hpp"
+#include "Board.hpp"
+#include "Position.hpp"
 
   
 struct BoardUser : public Board
 {
-    bool pushShip(int x, int y);
+    bool pushShip(const Position& p);
 };
     

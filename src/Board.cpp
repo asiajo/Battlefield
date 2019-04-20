@@ -1,5 +1,4 @@
 #include "../include/Board.hpp"
-#include <iostream>
 
 Board::Board()
 {
@@ -8,17 +7,17 @@ Board::Board()
 
 Board::~Board(){}
 
-void Board::fillWithZeros(std::vector<std::vector<int>>& field, int vSize)
+void Board::fillWithZeros(std::vector<std::vector<FieldStatus>>& field, const int vSize)
 {
     field.resize(vSize);
-    std::for_each(begin(field), end(field), [&](std::vector<int> &f){ f.resize(vSize, 0); });
+    std::for_each(begin(field), end(field), [&](std::vector<FieldStatus> &f){ f.resize(vSize, FieldStatus::FREE); });
 }
 
-int Board::getFieldInfo(int x, int y) const
+FieldStatus Board::getFieldInfo(const Position& p) const
 {
-    if( ( x < _fieldSize && x > 0 ) && ( y < _fieldSize && y > 0 ) )
-        return battleField[x][y];
-    else return -1;
+    if( p < _fieldSize && p > 0 )
+        return battleField[p.x][p.y];
+    else return FieldStatus::OUT_OF_BOUNDS;
 }
 
 int Board::getFieldSize() const
@@ -26,81 +25,85 @@ int Board::getFieldSize() const
     return _fieldSize;
 }
 
-void Board::SetField(int x, int y, int val)
+void Board::SetField(const Position& p, const FieldStatus val)
 {
-    battleField[x][y] = val;
+    battleField[p.x][p.y] = val;
 }
 
-bool Board::shoot(int x, int y)
+ShootResult Board::shoot(const Position& p)
 {
     int vSize = getFieldSize();
-    if( ( x < vSize && x > 0 ) && ( y < vSize && y > 0 ) )
+    if( p < vSize && p > 0 )
     {
-        if(getFieldInfo(x, y) == 1)
+        if(getFieldInfo(p) == FieldStatus::SHIP)
         {
-           SetField(x, y, 2);
-            return true;
+            SetField(p, FieldStatus::SHOT);
+            return isShipShot(p);
         }
-        else if (getFieldInfo(x, y) == 0)
+        else if (getFieldInfo(p) == FieldStatus::FREE)
         {
-            SetField(x, y, 3);
-            return false;
+            SetField(p, FieldStatus::MISSED);
+            return ShootResult::MISS;
         }
     }
-    return false;
+    return ShootResult::FAIL;
 }
 
-bool Board::checkSurroundingForUnshotShip(int x, int y) const
+bool Board::checkSurroundingForUnshotShip(const Position& p) const
 {
-    if(getFieldInfo(x+1, y  ) == 1) return false;
-    if(getFieldInfo(x-1, y  ) == 1) return false;
-    if(getFieldInfo(x  , y+1) == 1) return false;
-    if(getFieldInfo(x  , y-1) == 1) return false; 
+    Position p1 = {p.x+1, p.y};
+    if(getFieldInfo(p1) == FieldStatus::SHIP) return false;
+    Position p2 = {p.x-1, p.y};
+    if(getFieldInfo(p2) == FieldStatus::SHIP) return false;
+    Position p3 = {p.x, p.y+1};
+    if(getFieldInfo(p3) == FieldStatus::SHIP) return false;
+    Position p4 = {p.x, p.y-1};
+    if(getFieldInfo(p4) == FieldStatus::SHIP) return false; 
     return true;
 }
 
-void Board::checkSurroundingForShotShip(int x, int y, std::vector<std::pair<int, int>>& ship)
+void Board::checkSurroundingForShotShip(const Position& p, std::vector<Position>& ship)
 {
-    if(getFieldInfo(x, y) == 2 && std::find(begin(ship), end(ship), std::make_pair(x,y)) == end(ship)) 
+    if(getFieldInfo(p) == FieldStatus::SHOT && std::find(begin(ship), end(ship), p) == end(ship)) 
     {
-        ship.push_back(std::make_pair(x,y));
-        checkSurroundingForShotShips(x,y, ship);
+        ship.push_back(p);
+        checkSurroundingForShotShips(p, ship);
     }
 }
 
-void Board::checkSurroundingForShotShips(int x, int y, std::vector<std::pair<int, int>>& ship)
+void Board::checkSurroundingForShotShips(const Position& p, std::vector<Position>& ship)
 {
-    checkSurroundingForShotShip(x+1, y  , ship);
-    checkSurroundingForShotShip(x-1, y  , ship);
-    checkSurroundingForShotShip(x  , y+1, ship);
-    checkSurroundingForShotShip(x  , y-1, ship);
+    Position p1 = {p.x+1, p.y};
+    checkSurroundingForShotShip(p1, ship);
+    Position p2 = {p.x-1, p.y};
+    checkSurroundingForShotShip(p2, ship);
+    Position p3 = {p.x, p.y+1};
+    checkSurroundingForShotShip(p3, ship);
+    Position p4 = {p.x, p.y-1};
+    checkSurroundingForShotShip(p4, ship);
 }
 
-bool Board::isShipShot(int x, int y, int& shipSize)
+ShootResult Board::isShipShot(const Position& p)
 {   
-    std::vector<std::pair<int, int>> ship{std::make_pair(x,y)};
-    checkSurroundingForShotShips(x,y, ship);
-    for(std::pair<int, int> elem : ship)
-        if(!checkSurroundingForUnshotShip(elem.first, elem.second))
-            return false;
-    shipSize = ship.size();
+    std::vector<Position> ship{p};
+    checkSurroundingForShotShips(p, ship);
+    for(Position pos : ship)
+        if(!checkSurroundingForUnshotShip(pos))
+            return ShootResult::HIT;
     fillSuroundingOfShotShip(ship);
-    return true; 
+    return static_cast<ShootResult>(std::min((int)ship.size(), 4)); // just in case the user created ships not according to rules
 }
 
-void Board::fillSuroundingOfShotShip(std::vector<std::pair<int, int>>& ship)
+void Board::fillSuroundingOfShotShip(std::vector<Position>& ship)
 {
-    for(std::pair<int, int> elem : ship)
+    for(Position elem : ship)
     {   
-        int x = elem.first;
-        int y = elem.second;
-        if(getFieldInfo(x+1, y  ) == 0) SetField(x+1, y  , 8);
-        if(getFieldInfo(x-1, y  ) == 0) SetField(x-1, y  , 8);
-        if(getFieldInfo(x,   y+1) == 0) SetField(x,   y+1, 8);
-        if(getFieldInfo(x,   y-1) == 0) SetField(x,   y-1, 8);
-        if(getFieldInfo(x+1, y+1) == 0) SetField(x+1, y+1, 8);
-        if(getFieldInfo(x-1, y-1) == 0) SetField(x-1, y-1, 8);
-        if(getFieldInfo(x-1, y+1) == 0) SetField(x-1, y+1, 8);
-        if(getFieldInfo(x+1, y-1) == 0) SetField(x+1, y-1, 8);
+        for( int x = elem.x-1; x <= elem.x+1; x ++)
+            for(int y = elem.y-1; y <= elem.y+1; y++)
+            {
+                Position p = {x, y};
+                if(getFieldInfo(p) == FieldStatus::FREE) SetField(p , FieldStatus::SHIP_SURROUNDING);
+            }
+
     }
 }

@@ -1,13 +1,13 @@
 #include "../include/BoardUser.hpp"
 
     
-bool BoardUser::pushShip(int x, int y)
+bool BoardUser::pushShip(const Position& p)
 {
-    if( ( x < _fieldSize-1 && x > 0 ) && ( y < _fieldSize-1 && y > 0 ) )
+    if( p < _fieldSize-1 && p > 0 )
     {
-        if(battleField[x][y] == 0)
+        if(battleField[p.x][p.y] == FieldStatus::FREE)
         {
-            battleField[x][y] = 1;
+            battleField[p.x][p.y] = FieldStatus::SHIP;
             return true;
         }
     }

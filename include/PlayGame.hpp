@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../include/Board.hpp"
-#include "../include/ShootingActionComputer.hpp"
-#include "../include/BoardComputer.hpp"
-#include "../include/BoardUser.hpp"
-#include "../include/Board.hpp"
+#include "Board.hpp"
+#include "ShootingActionComputer.hpp"
+#include "BoardComputer.hpp"
+#include "BoardUser.hpp"
+#include "Board.hpp"
+#include "Position.hpp"
 
 #include <thread>
 
@@ -15,6 +16,6 @@ class PlayGame
 public:
     PlayGame(ShootingActionComputer& ShootingActionComputer);
     bool checkIfWon(const Board& board) const;
-    bool shootingAtComputer(int x, int y, BoardComputer& computerBoard, int& shipSize);
+    bool shootingAtComputer(const Position& p, BoardComputer& computerBoard, int& shipSize);
     bool shootingByComputer(Board& playerBoard);
 };

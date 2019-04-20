@@ -5,23 +5,24 @@ class BoardUserTest : public ::testing::Test
 {
 public:
     BoardUser boardUser;
+    Position pos = {1,1};
 };
 
 
 TEST_F(BoardUserTest, getValueAt11Expect0)
 {
-    EXPECT_EQ(0, boardUser.getFieldInfo(1,1));
+    EXPECT_EQ(FieldStatus::FREE, boardUser.getFieldInfo(pos));
 }
 
 TEST_F(BoardUserTest, pushShipExpectTrue)
 {
-    EXPECT_EQ(true, boardUser.pushShip(1,1));
+    EXPECT_EQ(true, boardUser.pushShip(pos));
 }
 
 TEST_F(BoardUserTest, getValueAt11Expect1)
 {
-    boardUser.pushShip(1,1);
-    EXPECT_EQ(1, boardUser.getFieldInfo(1,1));
+    boardUser.pushShip(pos);
+    EXPECT_EQ(FieldStatus::SHIP, boardUser.getFieldInfo(pos));
 }
 
 TEST_F(BoardUserTest, getFieldSizeExpect12)
@@ -31,69 +32,51 @@ TEST_F(BoardUserTest, getFieldSizeExpect12)
 
 TEST_F(BoardUserTest, checkIfSetFieldSetsFieldValue)
 {
-    boardUser.SetField(1, 1, 2);
-    EXPECT_EQ(2, boardUser.getFieldInfo(1,1));
+    boardUser.SetField(pos, FieldStatus::SHOT);
+    EXPECT_EQ(FieldStatus::SHOT, boardUser.getFieldInfo(pos));
 }
 
-
-TEST_F(BoardUserTest, shootUserAtEmptyUserFieldExpectFalse)
+TEST_F(BoardUserTest, isShipShotAt11ExpectSUNK1)
 {
-    EXPECT_EQ(false, boardUser.shoot(1,1));
+    boardUser.pushShip(pos);
+    EXPECT_EQ(ShootResult::SUNK1, boardUser.shoot(pos));
 }
 
-TEST_F(BoardUserTest, shootUserAtFilledFieldExpectTrue)
+TEST_F(BoardUserTest, isShipShotAt33ExpectSUNK1)
 {
-    boardUser.pushShip(1,1);
-    EXPECT_EQ(true, boardUser.shoot(1,1));
+    Position pos33 = {3, 3};
+    boardUser.pushShip(pos33);
+    EXPECT_EQ(ShootResult::SUNK1, boardUser.shoot(pos33));
 }
 
-TEST_F(BoardUserTest, shootUserOutOfBoundsExpectFalse)
+TEST_F(BoardUserTest, shootUserAtEmptyUserFieldExpectMISS)
+{
+    EXPECT_EQ(ShootResult::MISS, boardUser.shoot(pos));
+}
+
+TEST_F(BoardUserTest, shootUserAtFilledFieldExpectHIT)
+{
+    boardUser.pushShip(pos);
+    Position pos12 = {1,2};
+    boardUser.pushShip(pos12);
+    EXPECT_EQ(ShootResult::HIT, boardUser.shoot(pos));
+}
+
+TEST_F(BoardUserTest, shootUserOutOfBoundsExpectFAIL)
 {
     int i = boardUser.getFieldSize();
-    EXPECT_EQ(false, boardUser.shoot(i+1,i+1));
-}
-
-TEST_F(BoardUserTest, isShipShotAt33ExpectTrue)
-{
-    boardUser.pushShip(3,3);
-    boardUser.shoot(3,3);
-    int shipSize = 0;
-    EXPECT_EQ(true, boardUser.isShipShot(3,3, shipSize));
-    EXPECT_EQ(1, shipSize);
-
-}
-
-TEST_F(BoardUserTest, isShipShotAt11ExpectTrue)
-{
-    boardUser.pushShip(1,1);
-    boardUser.shoot(1,1);
-    int shipSize = 0;
-    EXPECT_EQ(true, boardUser.isShipShot(1,1,shipSize));
+    Position pos = {i+1,i+1};
+    EXPECT_EQ(ShootResult::FAIL, boardUser.shoot(pos));
 }
 
 TEST_F(BoardUserTest, isTripleShipShotExpectTrue)
 {
-    boardUser.pushShip(1,1);
-    boardUser.pushShip(1,2);
-    boardUser.pushShip(1,3);
-    boardUser.shoot(1,1);
-    boardUser.shoot(1,2);
-    boardUser.shoot(1,3);
-    int shipSize = 0;
-    EXPECT_EQ(true, boardUser.isShipShot(1,1,shipSize));
-    EXPECT_EQ(true, boardUser.isShipShot(1,2,shipSize));
-    EXPECT_EQ(3, shipSize);
-}
-
-TEST_F(BoardUserTest, isTripleShipShotExpectFalse)
-{
-    boardUser.pushShip(1,1);
-    boardUser.pushShip(1,2);
-    boardUser.pushShip(1,3);
-    boardUser.shoot(1,1);
-    boardUser.shoot(1,2);
-    int shipSize = 0;
-    EXPECT_EQ(false, boardUser.isShipShot(1,1,shipSize));
-    EXPECT_EQ(false, boardUser.isShipShot(1,2,shipSize));
-    EXPECT_EQ(0, shipSize);
+    Position pos12 = {1, 2};
+    Position pos13 = {1, 3};
+    boardUser.pushShip(pos);
+    boardUser.pushShip(pos12);
+    boardUser.pushShip(pos13);
+    EXPECT_EQ(ShootResult::HIT, boardUser.shoot(pos));
+    EXPECT_EQ(ShootResult::HIT, boardUser.shoot(pos12));
+    EXPECT_EQ(ShootResult::SUNK3, boardUser.shoot(pos13));
 }

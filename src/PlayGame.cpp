@@ -10,30 +10,42 @@ bool PlayGame::checkIfWon(const Board& board) const
 
     for (int i = 1; i < bSize-1; i++)
         for(int j = 1; j < bSize-1; j++)
-            if (board.getFieldInfo(i, j) == 1)
+        {
+            Position p = {i,j};
+            if (board.getFieldInfo(p) == FieldStatus::SHIP)
                 return false;
+        }
     for (int i = 1; i < bSize-1; i++)
         for(int j = 1; j < bSize-1; j++)
-            if (board.getFieldInfo(i, j) == 2 || board.getFieldInfo(i, j) == 3 )
+        {
+            Position p = {i,j};
+            if (board.getFieldInfo(p) == FieldStatus::SHOT || board.getFieldInfo(p) == FieldStatus::MISSED )
                 return true;
+        }
     
     return false;
 }
 
 
-bool PlayGame::shootingAtComputer(int x, int y, BoardComputer& computerBoard, int& shipSize)
+bool PlayGame::shootingAtComputer(const Position& p, BoardComputer& computerBoard, int& shipSize)
 {
     shipSize = 0;
-    if(computerBoard.getFieldInfo(x,y)<=1)
+    if(computerBoard.getFieldInfo(p) == FieldStatus::SHIP
+    || computerBoard.getFieldInfo(p) == FieldStatus::FREE)
     {
-        computerBoard.shoot(x,y);
-        if(computerBoard.getFieldInfo(x,y) == 2) 
-            if(computerBoard.isShipShot(x, y, shipSize))
+        ShootResult result = computerBoard.shoot(p);
+        if( result == ShootResult::SUNK1 ||
+            result == ShootResult::SUNK2 ||
+            result == ShootResult::SUNK3 ||
+            result == ShootResult::SUNK4 )
+            {
                 computerBoard.crossFields();
-        computerBoard.setVisibleField(x,y,computerBoard.getFieldInfo(x, y));
-        if(computerBoard.getFieldInfo(x,y)==2)
+                shipSize = static_cast<int>(result);
+            }
+        computerBoard.setVisibleField(p, computerBoard.getFieldInfo(p));
+        if(computerBoard.getFieldInfo(p)==FieldStatus::SHOT)
             return false;
-        else
+        else 
             return true;
     }
     return false;
@@ -41,18 +53,21 @@ bool PlayGame::shootingAtComputer(int x, int y, BoardComputer& computerBoard, in
 
 bool PlayGame::shootingByComputer(Board& playerBoard)
 {
-    int myShipSize;
-    std::pair <int, int> shipPos = _ShootingActionComputer.computerShot(playerBoard);
+    Position shipPos = _ShootingActionComputer.computerShot(playerBoard);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    playerBoard.shoot(shipPos.first, shipPos.second);
-    if(playerBoard.getFieldInfo(shipPos.first, shipPos.second) == 2) 
-    {
-        if(playerBoard.isShipShot(shipPos.first, shipPos.second, myShipSize))
+    ShootResult result = playerBoard.shoot(shipPos);
+    if ( result == ShootResult::SUNK1 ||
+         result == ShootResult::SUNK2 ||
+         result == ShootResult::SUNK3 ||
+         result == ShootResult::SUNK4)               
+            {
                 _ShootingActionComputer.clearShotShip();
-        else
-            _ShootingActionComputer.addUnshotShip(std::make_pair(shipPos.first, shipPos.second));
+                return false;
+            } 
+    if (result == ShootResult::HIT)
+    {
+        _ShootingActionComputer.addUnshotShip(shipPos);
         return false;
     }
-    else
-        return true;
+    return true;
 }

@@ -2,25 +2,30 @@
 
 #include <vector>
 #include <algorithm>
+#include "FieldStatus.hpp"
+#include "ShootResult.hpp"
+#include "Position.hpp"
 
 class Board
 {
+    ShootResult isShipShot(const Position& p);
+    bool checkSurroundingForUnshotShip(const Position& p) const;
+    void checkSurroundingForShotShip( const Position& p, std::vector<Position>& ship);
+    void checkSurroundingForShotShips(const Position& p, std::vector<Position>& ship);
+    void fillSuroundingOfShotShip(std::vector<Position>& ship);
+
 protected:
     int _fieldSize = 12;
-    std::vector<std::vector<int>> battleField; 
-    void fillWithZeros(std::vector<std::vector<int>>& field, int vSize);
-    bool checkSurroundingForUnshotShip(int x, int y) const;
-    void checkSurroundingForShotShip( int x, int y, std::vector<std::pair<int, int>>& ship);
-    void checkSurroundingForShotShips(int x, int y, std::vector<std::pair<int, int>>& ship);
-    void fillSuroundingOfShotShip(std::vector<std::pair<int, int>>& ship);
+    std::vector<std::vector<FieldStatus>> battleField; 
+    void fillWithZeros(std::vector<std::vector<FieldStatus>>& field, const int vSize);
+
 public:
     Board();
     virtual ~Board() = 0;
-    int getFieldInfo(int x, int y) const;
+    FieldStatus getFieldInfo(const Position& p) const;
     int getFieldSize() const;
-    void SetField(int x, int y, int val);
-    bool shoot(int x, int y);
-    bool isShipShot(int x, int y, int& shipSize);
+    void SetField(const Position& p, const FieldStatus val);
+    ShootResult shoot(const Position& p);
     
 };
     
